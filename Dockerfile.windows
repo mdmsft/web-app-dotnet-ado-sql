@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0-nanoserver-ltsc2022 as sdk
+WORKDIR C:/Code
+ADD . .
+RUN dotnet publish -c Release -o C:/App
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-ltsc2022
+WORKDIR C:/App
+COPY --from=sdk C:/App ./
+ENTRYPOINT [ "dotnet", "WebApp.dll" ]

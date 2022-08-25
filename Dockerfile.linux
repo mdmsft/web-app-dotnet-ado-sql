@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as sdk
+WORKDIR /usr/src
+ADD . .
+RUN dotnet publish -c Release -o /usr/app
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
+WORKDIR /usr/app
+COPY --from=sdk /usr/app ./
+ENTRYPOINT [ "dotnet", "WebApp.dll" ]
